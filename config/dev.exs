@@ -19,11 +19,11 @@ config :heads_up, HeadsUp.Repo,
 # Binding to loopback ipv4 address prevents access from other machines.
 config :heads_up, HeadsUpWeb.Endpoint,
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [ip: {127, 0, 0, 1}, port: 4001],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "FmSF5mxYRJMu45EYHl0TE6lj8Tb8fC9X+iCdRwCTVkvJkQNeUGZ+7S6p+0Udlgcd",
+  secret_key_base: "3gwoWS+CfZsbX7y1YpYHI7AhMBDp2LxW/ZTmjOEC8+qvphjzvbJSO2BUKrT+kCos",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:heads_up, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:heads_up, ~w(--watch)]}
@@ -58,7 +58,8 @@ config :heads_up, HeadsUpWeb.Endpoint,
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/heads_up_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/heads_up_web/(controllers|live|components)/.*(ex|heex)$",
+      ~r"lib/heads_up/*"
     ]
   ]
 
