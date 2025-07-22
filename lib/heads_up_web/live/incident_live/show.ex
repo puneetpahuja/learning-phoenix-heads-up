@@ -3,7 +3,7 @@ defmodule HeadsUpWeb.IncidentLive.Show do
   use HeadsUpWeb, :live_view
 
   def mount(%{"id" => id}, _session, socket) do
-    incident = Incidents.get_incident(id)
+    incident = Incidents.get_incident!(id)
     urgent_incidents = Incidents.urgent_incidents(incident)
 
     {:ok,
