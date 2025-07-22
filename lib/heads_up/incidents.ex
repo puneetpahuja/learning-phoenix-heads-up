@@ -3,10 +3,10 @@ defmodule HeadsUp.Incidents do
   alias HeadsUp.Repo
   import Ecto.Query
 
-  def filter_incidents() do
+  def filter_incidents(filter) do
     from(i in Incident,
-      where: [status: :resolved],
-      where: ilike(i.name, "%in%"),
+      where: [status: ^filter["status"]],
+      where: ilike(i.name, ^"%#{filter["q"]}%"),
       order_by: [desc: :name]
     )
     |> Repo.all()
