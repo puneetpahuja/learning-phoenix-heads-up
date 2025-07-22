@@ -3,7 +3,10 @@ defmodule HeadsUpWeb.IncidentLive.Index do
   alias HeadsUp.Incidents
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, incidents: Incidents.list_incidents(), page_title: "Incidents")}
+    {:ok,
+     socket
+     |> stream(:incidents, Incidents.list_incidents())
+     |> assign(page_title: "Incidents")}
   end
 
   def render(assigns) do
@@ -15,18 +18,23 @@ defmodule HeadsUpWeb.IncidentLive.Index do
       </:tagline>
     </.headline>
     <div class="incident-index">
-      <div class="incidents">
-        <.incident_card :for={incident <- @incidents} incident={incident} />
+      <div class="incidents" id="incidents" phx-update="stream">
+        <.incident_card
+          :for={{dom_id, incident} <- @streams.incidents}
+          incident={incident}
+          id={dom_id}
+        />
       </div>
     </div>
     """
   end
 
   attr :incident, HeadsUp.Incidents.Incident, required: true
+  attr :id, :string, required: true
 
   def incident_card(assigns) do
     ~H"""
-    <.link navigate={~p"/incidents/#{@incident.id}"}>
+    <.link navigate={~p"/incidents/#{@incident.id}"} id={@id}>
       <div class="card">
         <img src={@incident.image_path} />
         <h2>{@incident.name}</h2>
