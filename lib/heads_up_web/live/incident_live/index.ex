@@ -5,18 +5,21 @@ defmodule HeadsUpWeb.IncidentLive.Index do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> stream(:incidents, Incidents.filter_incidents())
-     |> assign(page_title: "Incidents")}
+     |> stream(:incidents, Incidents.list_incidents())
+     |> assign(page_title: "Incidents", form: to_form(%{}))}
   end
 
   def render(assigns) do
     ~H"""
-    <.headline>
+    <.headline :if={false}>
       <.icon name="hero-trophy-mini" /> 25 Incidents Resolved This Month!
       <:tagline :let={vibe}>
         Thanks for pitching in. {vibe}
       </:tagline>
     </.headline>
+
+    <.filter_form form={@form} />
+
     <div class="incident-index">
       <div class="incidents" id="incidents" phx-update="stream">
         <.incident_card
@@ -26,6 +29,23 @@ defmodule HeadsUpWeb.IncidentLive.Index do
         />
       </div>
     </div>
+    """
+  end
+
+  attr :form, :map, required: true
+
+  def filter_form(assigns) do
+    ~H"""
+    <.form for={@form}>
+      <.input field={@form[:q]} placeholder="Search..." autocomplete="off" />
+      <.input
+        type="select"
+        field={@form[:status]}
+        prompt="Status"
+        options={Incidents.status_values()}
+      />
+      <.input type="select" field={@form[:sort_by]} prompt="Sort By" options={[:name, :priority]} />
+    </.form>
     """
   end
 

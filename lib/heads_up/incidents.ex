@@ -28,4 +28,8 @@ defmodule HeadsUp.Incidents do
     )
     |> Repo.all()
   end
+
+  def status_values() do
+    Ecto.Enum.values(Incident, :status)
+  end
 end
